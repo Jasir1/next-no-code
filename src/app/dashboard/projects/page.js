@@ -75,7 +75,7 @@ export default function ProjectsPage() {
           </div>
           <Link 
             href="/dashboard/editor/new"
-            className="flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white px-4 py-2.5 rounded-xl hover:shadow-lg transition-all duration-200"
+            className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2.5 rounded-xl hover:shadow-lg transition-all duration-200"
           >
             <Plus className="h-5 w-5" />
             <span>New Project</span>
