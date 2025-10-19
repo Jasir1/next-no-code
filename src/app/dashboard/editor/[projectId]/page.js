@@ -13,46 +13,153 @@ import { useEditorStore } from "@/lib/store/editorStore";
 import Canvas from "@/components/builder/Canvas";
 import ComponentPanel from "@/components/builder/ComponentPanel";
 import PropertiesPanel from "@/components/builder/PropertiesPanel";
-import {
-  Undo2,
-  Redo2,
-  Eye,
-  Save,
-  ArrowLeft,
-  Smartphone,
-  Tablet,
-  Monitor,
-  Download,
+import { 
+  Undo2, 
+  Redo2, 
+  Eye, 
+  Save, 
+  ArrowLeft, 
+  Smartphone, 
+  Tablet, 
+  Monitor, 
+  Download, 
   Plus,
   LayoutGrid,
   Settings,
   Type,
   Image as ImageIcon,
-  List,
-  Columns,
-  GalleryThumbnails,
-  X,
-  Menu,
-  Maximize2,
-  Minimize2,
   Code2,
   Palette,
   History,
   HelpCircle,
   User,
+  Bold,
+  Italic,
+  Underline,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignJustify,
+  Link2,
+  List as ListIcon,
+  ListOrdered,
+  Quote,
+  Code,
+  MoreHorizontal,
+  GripVertical,
+  Copy,
+  Trash2,
+  ArrowUp,
+  ArrowDown,
+  PlusCircle,
+  MinusCircle,
+  Type as TypeIcon,
+  ImagePlus,
+  LayoutGrid as LayoutGridIcon,
+  Table,
+  Video,
+  FileText,
+  Columns as ColumnsIcon,
+  Rows,
+  GalleryVertical,
+  PanelLeft,
+  PanelRight,
+  PanelTop,
+  PanelBottom,
+  PanelLeftClose,
+  PanelRightClose,
+  PanelTopClose,
+  PanelBottomClose,
+  PanelLeftOpen,
+  PanelRightOpen,
+  PanelTopOpen,
+  PanelBottomOpen,
+  StretchHorizontal,
+  StretchVertical,
+  WrapText,
+  AlignVerticalJustifyStart,
+  AlignVerticalJustifyCenter,
+  AlignVerticalJustifyEnd,
+  AlignHorizontalJustifyStart,
+  AlignHorizontalJustifyCenter,
+  AlignHorizontalJustifyEnd,
+  AlignHorizontalSpaceBetween,
+  AlignVerticalSpaceBetween,
+  AlignHorizontalSpaceAround,
+  AlignVerticalSpaceAround,
+  AlignStartVertical,
+  AlignCenterVertical,
+  AlignEndVertical,
+  AlignStartHorizontal,
+  AlignCenterHorizontal,
+  AlignEndHorizontal,
+  Space,
+  Square,
+  Circle,
+  Triangle,
+  Move3D,
+  Box,
+  Container,
+  PanelTopClose as PanelTopCloseIcon,
+  PanelBottomClose as PanelBottomCloseIcon,
+  PanelLeftClose as PanelLeftCloseIcon,
+  PanelRightClose as PanelRightCloseIcon,
+  PanelTopOpen as PanelTopOpenIcon,
+  PanelBottomOpen as PanelBottomOpenIcon,
+  PanelLeftOpen as PanelLeftOpenIcon,
+  PanelRightOpen as PanelRightOpenIcon,
+  PanelTop as PanelTopIcon,
+  PanelBottom as PanelBottomIcon,
+  PanelLeft as PanelLeftIcon,
+  PanelRight as PanelRightIcon,
+  PanelTopDashed as PanelTopDashedIcon,
+  PanelBottomDashed as PanelBottomDashedIcon,
+  PanelLeftDashed as PanelLeftDashedIcon,
+  PanelRightDashed as PanelRightDashedIcon,
+  PanelTopDashed,
+  PanelBottomDashed,
+  PanelLeftDashed,
+  PanelRightDashed,
+  PanelTopBar,
+  PanelBottomBar,
+  PanelLeftBar,
+  PanelRightBar,
+  PanelTopInactive,
+  PanelBottomInactive,
+  PanelLeftInactive,
+  PanelRightInactive,
+  PanelTopActive,
+  PanelBottomActive,
+  PanelLeftActive,
+  PanelRightActive,
+  PanelTopClose as PanelTopCloseIcon2,
+  PanelBottomClose as PanelBottomCloseIcon2,
+  PanelLeftClose as PanelLeftCloseIcon2,
+  PanelRightClose as PanelRightCloseIcon2,
+  PanelTopOpen as PanelTopOpenIcon2,
+  PanelBottomOpen as PanelBottomOpenIcon2,
+  PanelLeftOpen as PanelLeftOpenIcon2,
+  PanelRightOpen as PanelRightOpenIcon2,
+  PanelTop as PanelTopIcon2,
+  PanelBottom as PanelBottomIcon2,
+  PanelLeft as PanelLeftIcon2,
+  GalleryThumbnails,
+  Columns,
+  List,
+  Maximize2,
+  Menu,
+  X,
 } from "lucide-react";
-import Link from "next/link";
-// import Label from '@/components/ui/Label';
-import { Switch } from "@/components/ui/switch";
+
 import {
-  Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 // Block categories for the inserter
 const BLOCK_CATEGORIES = [
@@ -89,7 +196,7 @@ const BLOCKS = {
 export default function EditorPage({ params: paramsPromise }) {
   const params = use(paramsPromise);
   const { projectId } = params;
-  const { addComponent, undo, redo } = useEditorStore();
+  const { addComponent, undo, redo, selectedBlock, setSelectedBlock } = useEditorStore();
   const [activeId, setActiveId] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const [device, setDevice] = useState("desktop");
@@ -98,6 +205,116 @@ export default function EditorPage({ params: paramsPromise }) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isTextFormattingBarVisible, setIsTextFormattingBar] = useState(false);
+  const [textFormattingPosition, setTextFormattingPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartY, setDragStartY] = useState(0);
+  const [isReordering, setIsReordering] = useState(false);
+  const [isBlockSettingsOpen, setIsBlockSettingsOpen] = useState(false);
+  const [isReusableBlocksOpen, setIsReusableBlocksOpen] = useState(false);
+  const [isBlockPatternsOpen, setIsBlockPatternsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activePanel, setActivePanel] = useState('components'); // 'components', 'patterns', 'reusable'
+const [reusableBlocks, setReusableBlocks] = useState([]);
+
+  
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Undo: Ctrl+Z or Cmd+Z
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        undo();
+      }
+      // Redo: Ctrl+Shift+Z or Cmd+Shift+Z
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'Z') {
+        e.preventDefault();
+        redo();
+      }
+      // Delete: Delete or Backspace when block is selected
+      if ((e.key === 'Delete' || e.key === 'Backspace') && selectedBlock) {
+        e.preventDefault();
+        // Delete block logic here
+      }
+      // Duplicate: Ctrl+D or Cmd+D
+      if ((e.ctrlKey || e.metaKey) && e.key === 'd' && selectedBlock) {
+        e.preventDefault();
+        // Duplicate block logic here
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedBlock, undo, redo]);
+
+  // Handle text selection for formatting bar
+  useEffect(() => {
+    const handleSelectionChange = () => {
+      const selection = window.getSelection();
+      if (selection.toString().length > 0) {
+        const range = selection.getRangeAt(0);
+        const rect = range.getBoundingClientRect();
+        setTextFormattingPosition({
+          x: rect.left + window.scrollX + (rect.width / 2) - 100,
+          y: rect.top + window.scrollY - 50,
+        });
+        setIsTextFormattingBar(true);
+      } else {
+        setIsTextFormattingBar(false);
+      }
+    };
+
+    document.addEventListener('selectionchange', handleSelectionChange);
+    return () => document.removeEventListener('selectionchange', handleSelectionChange);
+  }, []);
+
+  // Handle block drag start for reordering
+  const handleBlockDragStart = (e, blockId) => {
+    setIsDragging(true);
+    setDragStartY(e.clientY);
+    // Add drag preview and other drag start logic
+  };
+
+  // Handle block drag end for reordering
+  const handleBlockDragEnd = (e, blockId) => {
+    setIsDragging(false);
+    // Handle reordering logic here
+  };
+
+  // Format text with the selected style
+  const formatText = (format) => {
+    document.execCommand(format, false, null);
+  };
+
+  // Create a link
+  const createLink = () => {
+    const url = prompt('Enter URL:');
+    if (url) {
+      document.execCommand('createLink', false, url);
+    }
+  };
+
+  // Add a new block
+  const addNewBlock = (blockType, blockProps = {}) => {
+    const newBlock = {
+      id: `block-${Date.now()}`,
+      type: blockType,
+      props: blockProps,
+    };
+    addComponent(newBlock);
+    setSelectedBlock(newBlock.id);
+  };
+
+  // Save current block as reusable
+  const saveAsReusable = () => {
+    if (selectedBlock) {
+      const name = prompt('Enter a name for this reusable block:');
+      if (name) {
+        // Save to reusable blocks logic here
+        alert(`Block saved as reusable: ${name}`);
+      }
+    }
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor, {

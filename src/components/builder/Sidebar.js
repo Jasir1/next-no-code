@@ -37,10 +37,38 @@ export default function Sidebar() {
       </div>
 
       {/* Tab Content */}
-      <div className="flex-1 overflow-y-auto">
-        {activeTab === 'components' && <ComponentPanel />}
-        {activeTab === 'layers' && <LayersPanel />}
-      </div>
+      <div className="flex border-b">
+  <button
+    className={`flex-1 py-2 px-4 text-sm font-medium ${
+      activePanel === 'components' 
+        ? 'border-b-2 border-blue-500 text-blue-600' 
+        : 'text-gray-500 hover:text-gray-700'
+    }`}
+    onClick={() => setActivePanel('components')}
+  >
+    Blocks
+  </button>
+  <button
+    className={`flex-1 py-2 px-4 text-sm font-medium ${
+      activePanel === 'patterns' 
+        ? 'border-b-2 border-blue-500 text-blue-600' 
+        : 'text-gray-500 hover:text-gray-700'
+    }`}
+    onClick={() => setActivePanel('patterns')}
+  >
+    Patterns
+  </button>
+  <button
+    className={`flex-1 py-2 px-4 text-sm font-medium ${
+      activePanel === 'reusable' 
+        ? 'border-b-2 border-blue-500 text-blue-600' 
+        : 'text-gray-500 hover:text-gray-700'
+    }`}
+    onClick={() => setActivePanel('reusable')}
+  >
+    Reusable
+  </button>
+</div>
     </div>
   );
 }
