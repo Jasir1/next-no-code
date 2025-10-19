@@ -1,17 +1,23 @@
+// src/app/dashboard/layout.js
+'use client';
+
 import { Inter } from 'next/font/google';
-import "./globals.css";
+import Sidebar from '@/components/dashboard/Sidebar';
+import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata = {
-  title: 'Website Builder - Create Beautiful Websites',
-  description: 'Professional no-code website builder with drag and drop',
-};
-
-export default function RootLayout({ children }) {
+export default function DashboardLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <div className="flex min-h-screen">
+          <Sidebar />
+          <main className="flex-1 ml-20">
+            {children}
+          </main>
+        </div>
+      </body>
     </html>
   );
 }
