@@ -1,53 +1,286 @@
-# Website Builder - Frontend
+# No-Code Website Builder
 
-A professional no-code website builder built with Next.js 14, featuring drag-and-drop functionality, visual editing, and responsive design capabilities.
+A modern, drag-and-drop website builder built with Next.js, React, and Tailwind CSS. Create beautiful websites without writing code.
 
-## 🚀 Tech Stack
+## 🚀 Features
 
-- **Next.js 14** - React framework with App Router
-- **Tailwind CSS** - Utility-first CSS framework
-- **Zustand** - Lightweight state management
-- **@dnd-kit** - Drag and drop functionality
-- **React Colorful** - Color picker
-- **Axios** - HTTP client for API calls
-- **Lucide React** - Icon library
+### Core Features
+- **Drag & Drop Interface**: Intuitive visual editor with drag-and-drop functionality
+- **Component Library**: Pre-built components including headings, text, buttons, images, containers
+- **Real-time Preview**: See changes instantly as you build
+- **Responsive Design**: Built-in responsive breakpoints (desktop, tablet, mobile)
+- **Properties Panel**: Visual styling controls for colors, typography, spacing, and layout
+- **Undo/Redo**: Full history management for safe editing
+- **Component Selection**: Click to select and edit individual components
+
+### Advanced Features
+- **State Management**: Robust state handling with Zustand
+- **Component Registry**: Extensible component system for easy addition of new elements
+- **Dynamic Rendering**: Components render based on their type and properties
+- **Flexible Styling**: CSS-in-JS approach with Tailwind integration
+
+## �️ Technology Stack
+
+### Frontend Framework
+- **Next.js 15**: React framework with App Router
+- **React 18**: Component-based UI library
+- **JavaScript**: No TypeScript for simplicity
+
+### Styling & UI
+- **Tailwind CSS 4**: Utility-first CSS framework
+- **Framer Motion**: Animation library for smooth interactions
+- **Radix UI**: Accessible UI components
+- **Lucide React**: Beautiful icon library
+
+### Drag & Drop
+- **@dnd-kit/core**: Modern drag-and-drop library
+- **@dnd-kit/sortable**: Sorting functionality for components
+- **@dnd-kit/utilities**: Helper utilities
+
+### State Management
+- **Zustand**: Lightweight state management
+- **UUID**: Unique identifier generation
+
+### Additional Libraries
+- **Axios**: HTTP client for API calls
+- **React Colorful**: Color picker component
+- **Lodash**: Utility functions
+- **HTML2Canvas**: Screenshot functionality
 
 ## 📁 Project Structure
 
 ```
-├── app/                    # Next.js App Router pages
-│   ├── layout.js          # Root layout
-│   ├── page.js            # Landing page
-│   ├── dashboard/         # Projects dashboard
-│   ├── editor/            # Visual editor
-│   └── preview/           # Preview mode
+src/
+├── app/                    # Next.js App Router
+│   ├── dashboard/
+│   │   ├── editor/[projectId]/
+│   │   │   └── page.js     # Main editor interface
+│   │   └── page.js         # Dashboard
+│   ├── globals.css         # Global styles
+│   ├── layout.js           # Root layout
+│   └── page.js             # Landing page
 ├── components/
-│   ├── builder/           # Editor components
-│   ├── elements/          # Draggable elements
-│   ├── properties/        # Property editors
-│   ├── ui/                # Reusable UI components
-│   └── common/            # Header/Footer
+│   ├── builder/            # Builder-specific components
+│   │   ├── BuilderInterface.js
+│   │   ├── Canvas.js       # Main canvas area
+│   │   ├── ComponentPanel.js # Component library
+│   │   ├── PropertiesPanel.js # Property editor
+│   │   ├── RenderComponent.js # Component renderer
+│   │   ├── LayersPanel.js
+│   │   └── Sidebar.js
+│   ├── common/             # Shared components
+│   ├── dashboard/          # Dashboard components
+│   ├── editor/             # Editor-specific components
+│   ├── elements/           # Individual element components
+│   ├── properties/         # Property panels
+│   └── ui/                 # Reusable UI components
 ├── lib/
-│   ├── store/             # Zustand stores
-│   ├── utils/             # Utility functions
-│   └── api/               # API client
-├── public/                # Static assets
-└── styles/                # Global styles
+│   ├── store/              # State management
+│   │   ├── editorStore.js  # Main editor state
+│   │   ├── authStore.js
+│   │   └── projectStore.js
+│   └── utils/              # Utility functions
+│       ├── componentRegistry.js # Component definitions
+│       ├── exportUtils.js
+│       └── styleUtils.js
+└── public/                 # Static assets
 ```
 
-## 🛠️ Installation
+## 🏗️ Architecture
 
-### 1. Create Next.js Project
+### Component System
+The builder uses a flexible component system where each component has:
+- **Type**: Unique identifier (heading, text, button, etc.)
+- **Properties**: Content, styles, and configuration
+- **Children**: Nested components for containers
+
+### State Management
+The editor state is managed by Zustand with:
+- **Components Array**: List of all components on the canvas
+- **Selected Component**: Currently selected component ID
+- **History**: Undo/redo functionality
+- **Breakpoints**: Responsive design states
+
+### Drag & Drop Flow
+1. **Component Panel**: Users drag components from the library
+2. **Canvas**: Droppable area that accepts components
+3. **DndContext**: Manages drag operations
+4. **SortableContext**: Handles component reordering
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd next-no-code
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Run development server**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open browser**
+   Navigate to `http://localhost:3000`
+
+### Development Commands
 
 ```bash
-npx create-next-app@latest website-builder-frontend
-# Choose:
-# ❌ TypeScript: No
-# ✅ Tailwind CSS: Yes
-# ✅ App Router: Yes
-# ❌ src directory: No
+# Development
+npm run dev
 
-cd website-builder-frontend
+# Build for production
+npm run build
+
+# Start production server
+npm start
+
+# Lint code
+npm run lint
+```
+
+## � How to Use
+
+### Basic Workflow
+
+1. **Access Editor**: Navigate to `/dashboard/editor/[projectId]`
+2. **Add Components**: Drag components from the left panel to the canvas
+3. **Edit Properties**: Select components and modify properties in the right panel
+4. **Preview**: Switch between desktop, tablet, and mobile views
+5. **Save**: Export or save your project
+
+### Adding New Components
+
+1. **Define Component**: Add to `componentRegistry.js`
+   ```javascript
+   {
+     type: 'new_component',
+     label: 'New Component',
+     icon: 'IconName',
+     defaultProps: {
+       content: 'Default content',
+       styles: { /* default styles */ }
+     }
+   }
+   ```
+
+2. **Implement Renderer**: Add case in `RenderComponent.js`
+   ```javascript
+   case componentTypes.NEW_COMPONENT:
+     return <div>{component.content}</div>;
+   ```
+
+3. **Add Properties**: Extend `PropertiesPanel.js` if needed
+
+## 🔧 Key Components Explained
+
+### Canvas (`Canvas.js`)
+- Main building area
+- Handles component dropping
+- Manages responsive breakpoints
+- Renders all components via `RenderComponent`
+
+### ComponentPanel (`ComponentPanel.js`)
+- Displays available components
+- Makes components draggable
+- Uses `@dnd-kit` for drag functionality
+
+### PropertiesPanel (`PropertiesPanel.js`)
+- Visual property editor
+- Supports text, colors, spacing, typography
+- Updates component styles in real-time
+
+### RenderComponent (`RenderComponent.js`)
+- Renders individual components based on type
+- Handles component selection
+- Manages sortable functionality
+
+### Editor Store (`editorStore.js`)
+- Central state management
+- Handles component CRUD operations
+- Manages undo/redo history
+- Controls responsive breakpoints
+
+## 🎨 Styling Guide
+
+### Tailwind Classes
+The builder uses Tailwind CSS for styling with custom utilities in `globals.css`.
+
+### Component Styling
+Components use inline styles for dynamic properties and Tailwind classes for layout.
+
+### Theme System
+- Light theme by default
+- Extensible color palette
+- Consistent spacing scale
+
+## 🔄 Data Flow
+
+1. **User Action** → Component interaction
+2. **Event Handler** → Updates store state
+3. **Store Update** → Triggers re-render
+4. **Component Re-render** → Visual feedback
+
+## 🚀 Deployment
+
+### Build for Production
+```bash
+npm run build
+npm start
+```
+
+### Environment Variables
+Create `.env.local` for configuration:
+```env
+NEXT_PUBLIC_API_URL=https://api.yourapp.com
+```
+
+## 🔮 Future Enhancements
+
+### Planned Features
+- **Template Library**: Pre-built page templates
+- **Collaborative Editing**: Real-time collaboration
+- **Custom Domains**: Domain connection
+- **Analytics**: Built-in analytics dashboard
+- **E-commerce**: Product and cart components
+- **CMS Integration**: Content management system
+
+### Technical Improvements
+- **Performance**: Code splitting and lazy loading
+- **Accessibility**: WCAG compliance
+- **Testing**: Comprehensive test suite
+- **Documentation**: API documentation
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 📞 Support
+
+For support, email support@yourapp.com or join our Discord community.
+
+---
+
+Built with ❤️ using Next.js and React
 ```
 
 ### 2. Install Dependencies

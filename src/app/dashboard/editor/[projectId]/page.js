@@ -13,6 +13,7 @@ import { useEditorStore } from "@/lib/store/editorStore";
 import Canvas from "@/components/builder/Canvas";
 import ComponentPanel from "@/components/builder/ComponentPanel";
 import PropertiesPanel from "@/components/builder/PropertiesPanel";
+import { Label } from "@/components/ui/label";
 import { 
   Undo2, 
   Redo2, 
@@ -147,6 +148,7 @@ import {
   Columns,
   List,
   Maximize2,
+  Minimize2,
   Menu,
   X,
 } from "lucide-react";
