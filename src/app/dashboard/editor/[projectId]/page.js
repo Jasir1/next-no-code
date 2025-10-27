@@ -885,52 +885,73 @@ export default function EditorPage({ params: paramsPromise }) {
 
         {/* Block Inserter */}
         {isInserterOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="bg-white rounded-lg w-full max-w-2xl max-h-[80vh] flex flex-col">
-              <div className="p-4 border-b flex justify-between items-center">
-                <h3 className="text-lg font-medium">Add Block</h3>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="bg-white rounded-xl w-full max-w-4xl max-h-[85vh] flex flex-col shadow-2xl border border-gray-200">
+              {/* Header */}
+              <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-xl">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900">Add Block</h3>
+                  <p className="text-sm text-gray-600 mt-1">Choose a block to add to your page</p>
+                </div>
                 <button
                   onClick={() => setIsInserterOpen(false)}
-                  className="p-1 hover:bg-gray-100 rounded-full"
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
                 >
-                  <X size={20} />
+                  <X size={20} className="text-gray-500" />
                 </button>
               </div>
-              <div className="p-4 border-b">
-                <Input
-                  placeholder="Search for a block..."
-                  className="w-full"
-                  autoFocus
-                />
+
+              {/* Search */}
+              <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                <div className="relative">
+                  <Input
+                    placeholder="Search for a block..."
+                    className="w-full pl-10 pr-4 py-3 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    autoFocus
+                  />
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+                </div>
               </div>
+
+              {/* Content */}
               <div className="flex flex-1 overflow-hidden">
-                <div className="w-48 border-r">
+                {/* Categories Sidebar */}
+                <div className="w-56 bg-gray-50 border-r border-gray-200 flex flex-col">
+                  <div className="p-4 border-b border-gray-200">
+                    <h4 className="text-sm font-medium text-gray-900 uppercase tracking-wide">Categories</h4>
+                  </div>
                   <Tabs
                     value={selectedCategory}
                     onValueChange={setSelectedCategory}
                     orientation="vertical"
-                    className="h-full"
+                    className="flex-1"
                   >
-                    <TabsList className="flex-col h-full w-full rounded-none border-0">
+                    <TabsList className="flex-col h-full w-full rounded-none border-0 bg-transparent p-2 space-y-1">
                       {BLOCK_CATEGORIES.map((category) => (
                         <TabsTrigger
                           key={category.id}
                           value={category.id}
-                          className="w-full justify-start"
+                          className="w-full justify-start px-3 py-2 text-left data-[state=active]:bg-blue-100 data-[state=active]:text-blue-700 data-[state=active]:shadow-sm rounded-lg transition-all duration-200 hover:bg-gray-100"
                         >
-                          <span className="mr-2">{category.icon}</span>
-                          {category.label}
+                          <span className="mr-3 text-gray-500">{category.icon}</span>
+                          <span className="font-medium">{category.label}</span>
                         </TabsTrigger>
                       ))}
                     </TabsList>
                   </Tabs>
                 </div>
-                <div className="flex-1 overflow-y-auto p-4">
-                  <div className="grid grid-cols-2 gap-3">
+
+                {/* Blocks Grid */}
+                <div className="flex-1 overflow-y-auto p-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {BLOCKS[selectedCategory]?.map((block) => (
                       <div
                         key={block.id}
-                        className="border rounded p-3 hover:border-blue-500 cursor-pointer flex flex-col items-center text-center"
+                        className="group border-2 border-gray-200 rounded-xl p-4 hover:border-blue-300 hover:shadow-lg cursor-pointer transition-all duration-200 bg-white hover:bg-blue-50/50"
                         onClick={() => {
                           addComponent({
                             type: block.id,
@@ -939,17 +960,37 @@ export default function EditorPage({ params: paramsPromise }) {
                           setIsInserterOpen(false);
                         }}
                       >
-                        <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mb-2">
-                          {block.icon || (
-                            <LayoutGrid size={20} className="text-gray-500" />
-                          )}
+                        <div className="flex flex-col items-center text-center space-y-3">
+                          <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-200 shadow-sm">
+                            {block.icon || (
+                              <LayoutGrid size={24} className="text-blue-600" />
+                            )}
+                          </div>
+                          <div>
+                            <span className="text-sm font-semibold text-gray-900 block">
+                              {block.label}
+                            </span>
+                            <span className="text-xs text-gray-500 mt-1 block">
+                              Click to add
+                            </span>
+                          </div>
                         </div>
-                        <span className="text-sm font-medium">
-                          {block.label}
-                        </span>
                       </div>
                     ))}
                   </div>
+
+                  {/* Empty state */}
+                  {(!BLOCKS[selectedCategory] || BLOCKS[selectedCategory].length === 0) && (
+                    <div className="flex flex-col items-center justify-center py-12 text-center">
+                      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                        <LayoutGrid size={24} className="text-gray-400" />
+                      </div>
+                      <h4 className="text-lg font-medium text-gray-900 mb-2">No blocks found</h4>
+                      <p className="text-gray-500 max-w-sm">
+                        There are no blocks in this category yet. Try selecting a different category or check back later.
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
