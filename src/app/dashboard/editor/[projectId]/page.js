@@ -198,7 +198,7 @@ const BLOCKS = {
 export default function EditorPage({ params: paramsPromise }) {
   const params = use(paramsPromise);
   const { projectId } = params;
-  const { addComponent, undo, redo, selectedComponent, selectComponent } = useEditorStore();
+  const { addComponent, undo, redo, selectedComponent, selectComponent, components } = useEditorStore();
   const [activeId, setActiveId] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const [device, setDevice] = useState("desktop");
