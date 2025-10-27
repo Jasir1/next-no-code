@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, useAnimation, AnimatePresence } from 'framer-motion';
 import { 
   Zap, Layout, Smartphone, Code, ArrowRight, Palette, 
@@ -128,14 +129,15 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
             <motion.div 
-              className="w-12 h-12 rounded-xl flex items-center justify-center"
+              className="w-12 h-12 rounded-xl flex items-center justify-center relative"
               whileHover={{ scale: 1.05, rotate: [0, -5, 5, -5, 0] }}
               transition={{ duration: 0.6 }}
             >
-              <img 
+              <Image 
                 src="/img/layers.png" 
                 alt="WebBuilder Logo" 
-                className="w-full h-full object-contain"
+                fill
+                className="object-contain"
               />
             </motion.div>
             <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
@@ -527,7 +529,7 @@ export default function LandingPage() {
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 0.6 }}
             >
-              Join thousands of creators and businesses who've built their online presence with WebBuilder
+              Join thousands of creators and businesses who&apos;ve built their online presence with WebBuilder
             </motion.p>
             
             <motion.div 
@@ -596,11 +598,12 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
-                  <img 
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden relative">
+                  <Image 
                     src="/img/layers.png" 
                     alt="WebBuilder Logo" 
-                    className="w-full h-full object-contain"
+                    fill
+                    className="object-contain"
                   />
                 </div>
                 <span className="text-xl font-bold text-white">WebBuilder</span>

@@ -6,10 +6,11 @@ import { CSS } from '@dnd-kit/utilities';
 import { useEditorStore } from '@/lib/store/editorStore';
 import { componentTypes } from '@/lib/utils/componentRegistry';
 import { useState } from 'react';
+import Image from 'next/image';
 import { BlockControls } from '@/components/editor/BlockControls';
 
 export default function RenderComponent({ component }) {
-  const { selectedComponent, selectComponent, updateComponent, deleteComponent, reorderComponents, components } = useEditorStore();
+  const { selectedComponent, selectComponent, updateComponent, deleteComponent, reorderComponents, components, duplicateComponent } = useEditorStore();
   const [isHovered, setIsHovered] = useState(false);
   const {
     attributes,
@@ -60,12 +61,7 @@ export default function RenderComponent({ component }) {
   };
 
   const handleDuplicate = () => {
-    const newComponent = {
-      ...component,
-      id: Date.now().toString(),
-    };
-    updateComponent(component.id, { ...component, duplicate: true });
-    // Note: In a real implementation, you'd add the duplicated component to the store
+    duplicateComponent(component.id);
   };
 
   const handleDelete = () => {
@@ -98,9 +94,11 @@ export default function RenderComponent({ component }) {
       
       case componentTypes.IMAGE:
         return (
-          <img
+          <Image
             src={component.src}
             alt={component.alt}
+            width={400}
+            height={300}
             className="max-w-full h-auto"
           />
         );
@@ -181,11 +179,14 @@ export default function RenderComponent({ component }) {
         return (
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
             {component.image && (
-              <img
-                src={component.image}
-                alt={component.title}
-                className="w-full h-48 object-cover"
-              />
+              <div className="relative h-48">
+                <Image
+                  src={component.image}
+                  alt={component.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
             )}
             <div className="p-6">
               <h3 className="text-xl font-semibold mb-2">{component.title}</h3>

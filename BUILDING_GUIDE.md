@@ -330,7 +330,7 @@ export default function RenderComponent({ component }) {
 
       case componentTypes.IMAGE:
         return (
-          <img
+          <Image
             src={component.src}
             alt={component.alt}
             className="max-w-full h-auto"
@@ -658,7 +658,7 @@ export function exportToHTML(components) {
         return `<button style="${styles}">${component.content}</button>`;
 
       case 'image':
-        return `<img src="${component.src}" alt="${component.alt}" style="${styles}" />`;
+        return `<Image src="${component.src}" alt="${component.alt}" style="${styles}" />`;
 
       case 'container':
         const childrenHTML = component.children?.map(generateHTML).join('') || '';

@@ -198,7 +198,7 @@ const BLOCKS = {
 export default function EditorPage({ params: paramsPromise }) {
   const params = use(paramsPromise);
   const { projectId } = params;
-  const { addComponent, undo, redo, selectedBlock, setSelectedBlock } = useEditorStore();
+  const { addComponent, undo, redo, selectedComponent, selectComponent } = useEditorStore();
   const [activeId, setActiveId] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const [device, setDevice] = useState("desktop");
@@ -215,9 +215,9 @@ export default function EditorPage({ params: paramsPromise }) {
   const [isBlockSettingsOpen, setIsBlockSettingsOpen] = useState(false);
   const [isReusableBlocksOpen, setIsReusableBlocksOpen] = useState(false);
   const [isBlockPatternsOpen, setIsBlockPatternsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activePanel, setActivePanel] = useState('components'); // 'components', 'patterns', 'reusable'
-const [reusableBlocks, setReusableBlocks] = useState([]);
+  const [isCodeViewOpen, setIsCodeViewOpen] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
 
   
   // Keyboard shortcuts
@@ -234,12 +234,12 @@ const [reusableBlocks, setReusableBlocks] = useState([]);
         redo();
       }
       // Delete: Delete or Backspace when block is selected
-      if ((e.key === 'Delete' || e.key === 'Backspace') && selectedBlock) {
+      if ((e.key === 'Delete' || e.key === 'Backspace') && selectedComponent) {
         e.preventDefault();
         // Delete block logic here
       }
       // Duplicate: Ctrl+D or Cmd+D
-      if ((e.ctrlKey || e.metaKey) && e.key === 'd' && selectedBlock) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'd' && selectedComponent) {
         e.preventDefault();
         // Duplicate block logic here
       }
@@ -247,7 +247,7 @@ const [reusableBlocks, setReusableBlocks] = useState([]);
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedBlock, undo, redo]);
+  }, [selectedComponent, undo, redo]);
 
   // Handle text selection for formatting bar
   useEffect(() => {
@@ -304,12 +304,12 @@ const [reusableBlocks, setReusableBlocks] = useState([]);
       props: blockProps,
     };
     addComponent(newBlock);
-    setSelectedBlock(newBlock.id);
+    selectComponent(newBlock.id);
   };
 
   // Save current block as reusable
   const saveAsReusable = () => {
-    if (selectedBlock) {
+    if (selectedComponent) {
       const name = prompt('Enter a name for this reusable block:');
       if (name) {
         // Save to reusable blocks logic here
@@ -358,17 +358,231 @@ const [reusableBlocks, setReusableBlocks] = useState([]);
     }
   };
 
+  const handleNewProject = () => {
+    // Clear current project and start fresh
+    if (confirm('Are you sure you want to start a new project? Any unsaved changes will be lost.')) {
+      // Reset the editor store
+      // In a real app, this would navigate to a new project creation page
+      alert('New project functionality would be implemented here');
+    }
+  };
+
+  const handleEditOptions = () => {
+    // Show edit options menu
+    alert('Edit options: Cut, Copy, Paste, Select All, etc.');
+  };
+
+  const handleViewOptions = () => {
+    // Show view options menu
+    alert('View options: Zoom, Grid, Rulers, etc.');
+  };
+
+  const handleHelp = () => {
+    // Show help menu or documentation
+    alert('Help: Keyboard shortcuts, tutorials, documentation, etc.');
+  };
+
   const handleDownload = () => {
-    // This is a placeholder. In a real app, you would generate and download the project files
-    const element = document.createElement("a");
-    const file = new Blob([JSON.stringify({ components, history }, null, 2)], {
-      type: "application/json",
-    });
-    element.href = URL.createObjectURL(file);
-    element.download = `project-${projectId}.json`;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+    // Download the current page/project
+    alert('Download functionality would be implemented here. This could export the page as HTML, JSON, or other formats.');
+  };
+
+  const handleShowHistory = () => {
+    // Show revision history or undo/redo panel
+    alert('History panel would open here, showing previous versions and allowing undo/redo operations.');
+  };
+
+  const handleInsertTemplate = (templateType) => {
+    // Insert predefined templates into the editor
+    const templates = {
+      hero: {
+        type: 'container',
+        content: 'Hero Section',
+        styles: {
+          backgroundColor: '#f3f4f6',
+          padding: '4rem 2rem',
+          textAlign: 'center',
+          minHeight: '400px'
+        },
+        children: [
+          {
+            type: 'text',
+            content: 'Welcome to Our Platform',
+            styles: {
+              fontSize: '3rem',
+              fontWeight: 'bold',
+              marginBottom: '1rem',
+              color: '#1f2937'
+            }
+          },
+          {
+            type: 'text',
+            content: 'Build amazing websites with our no-code editor',
+            styles: {
+              fontSize: '1.25rem',
+              color: '#6b7280',
+              marginBottom: '2rem'
+            }
+          },
+          {
+            type: 'button',
+            content: 'Get Started',
+            styles: {
+              backgroundColor: '#3b82f6',
+              color: 'white',
+              padding: '0.75rem 2rem',
+              borderRadius: '0.5rem',
+              fontWeight: '500'
+            }
+          }
+        ]
+      },
+      features: {
+        type: 'container',
+        content: 'Features Grid',
+        styles: {
+          padding: '4rem 2rem',
+          backgroundColor: 'white'
+        },
+        children: [
+          {
+            type: 'text',
+            content: 'Features',
+            styles: {
+              fontSize: '2.25rem',
+              fontWeight: 'bold',
+              textAlign: 'center',
+              marginBottom: '3rem',
+              color: '#1f2937'
+            }
+          },
+          {
+            type: 'container',
+            content: 'Feature Row',
+            styles: {
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '2rem'
+            },
+            children: [
+              {
+                type: 'container',
+                content: 'Feature 1',
+                styles: {
+                  padding: '2rem',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '0.5rem',
+                  textAlign: 'center'
+                },
+                children: [
+                  {
+                    type: 'text',
+                    content: 'Easy to Use',
+                    styles: {
+                      fontSize: '1.5rem',
+                      fontWeight: 'bold',
+                      marginBottom: '1rem',
+                      color: '#1f2937'
+                    }
+                  },
+                  {
+                    type: 'text',
+                    content: 'Intuitive drag-and-drop interface',
+                    styles: {
+                      color: '#6b7280'
+                    }
+                  }
+                ]
+              },
+              {
+                type: 'container',
+                content: 'Feature 2',
+                styles: {
+                  padding: '2rem',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '0.5rem',
+                  textAlign: 'center'
+                },
+                children: [
+                  {
+                    type: 'text',
+                    content: 'Fast & Reliable',
+                    styles: {
+                      fontSize: '1.5rem',
+                      fontWeight: 'bold',
+                      marginBottom: '1rem',
+                      color: '#1f2937'
+                    }
+                  },
+                  {
+                    type: 'text',
+                    content: 'Built for performance and scalability',
+                    styles: {
+                      color: '#6b7280'
+                    }
+                  }
+                ]
+              },
+              {
+                type: 'container',
+                content: 'Feature 3',
+                styles: {
+                  padding: '2rem',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '0.5rem',
+                  textAlign: 'center'
+                },
+                children: [
+                  {
+                    type: 'text',
+                    content: 'Customizable',
+                    styles: {
+                      fontSize: '1.5rem',
+                      fontWeight: 'bold',
+                      marginBottom: '1rem',
+                      color: '#1f2937'
+                    }
+                  },
+                  {
+                    type: 'text',
+                    content: 'Tailor every aspect to your needs',
+                    styles: {
+                      color: '#6b7280'
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    const template = templates[templateType];
+    if (template) {
+      addComponent(template);
+      alert(`Inserted ${templateType} template`);
+    } else {
+      alert(`Template "${templateType}" not found`);
+    }
+  };
+
+  const handleShowCode = () => {
+    setIsCodeViewOpen(true);
+  };
+
+  const handleSetFeaturedImage = () => {
+    // In a real app, this would open a media library or file picker
+    const imageUrl = prompt('Enter image URL:');
+    if (imageUrl) {
+      // This would update the page settings with the featured image
+      alert(`Featured image set to: ${imageUrl}`);
+    }
+  };
+
+  const handleEditCSS = () => {
+    // In a real app, this would open a CSS editor modal
+    alert('CSS Editor would open here. For now, you can add custom CSS classes in the "CSS Classes" field above.');
   };
 
   // Toggle fullscreen mode
@@ -413,9 +627,9 @@ const [reusableBlocks, setReusableBlocks] = useState([]);
               <span className="font-bold">NoCode</span>
             </Link>
             <span className="text-gray-400">|</span>
-            <button className="hover:text-blue-300">New</button>
-            <button className="hover:text-blue-300">Edit</button>
-            <button className="hover:text-blue-300">View</button>
+            <button className="hover:text-blue-300" onClick={handleNewProject}>New</button>
+            <button className="hover:text-blue-300" onClick={handleEditOptions}>Edit</button>
+            <button className="hover:text-blue-300" onClick={handleViewOptions}>View</button>
           </div>
           <div className="flex items-center space-x-4">
             <button
@@ -425,7 +639,7 @@ const [reusableBlocks, setReusableBlocks] = useState([]);
             >
               {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
             </button>
-            <button className="hover:text-blue-300">
+            <button className="hover:text-blue-300" onClick={handleHelp}>
               <HelpCircle size={16} />
             </button>
             <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-xs">
@@ -551,13 +765,13 @@ const [reusableBlocks, setReusableBlocks] = useState([]);
                   </button>
                 </div>
                 <div className="space-y-2">
-                  <Button variant="outline" className="w-full justify-start">
+                  <Button variant="outline" className="w-full justify-start" onClick={handleSave}>
                     <Save className="h-4 w-4 mr-2" /> Save
                   </Button>
-                  <Button variant="outline" className="w-full justify-start">
+                  <Button variant="outline" className="w-full justify-start" onClick={() => window.open(`/dashboard/preview/${projectId}`, '_blank')}>
                     <Eye className="h-4 w-4 mr-2" /> Preview
                   </Button>
-                  <Button variant="outline" className="w-full justify-start">
+                  <Button variant="outline" className="w-full justify-start" onClick={handleDownload}>
                     <Download className="h-4 w-4 mr-2" /> Export
                   </Button>
                   <Separator className="my-2" />
@@ -600,20 +814,20 @@ const [reusableBlocks, setReusableBlocks] = useState([]);
               </TabsContent>
               <TabsContent value="templates" className="p-4">
                 <div className="space-y-4">
-                  <div className="border rounded-md p-3 hover:border-blue-500 cursor-pointer">
-                    <div className="h-20 bg-gray-100 mb-2 rounded"></div>
-                    <h4 className="text-sm font-medium">Hero Section</h4>
-                    <p className="text-xs text-gray-500">
-                      A full-width hero with heading and CTA
-                    </p>
-                  </div>
-                  <div className="border rounded-md p-3 hover:border-blue-500 cursor-pointer">
-                    <div className="h-20 bg-gray-100 mb-2 rounded"></div>
-                    <h4 className="text-sm font-medium">Features Grid</h4>
-                    <p className="text-xs text-gray-500">
-                      Showcase features in a responsive grid
-                    </p>
-                  </div>
+                <div className="border rounded-md p-3 hover:border-blue-500 cursor-pointer" onClick={() => handleInsertTemplate('hero')}>
+                  <div className="h-20 bg-gray-100 mb-2 rounded"></div>
+                  <h4 className="text-sm font-medium">Hero Section</h4>
+                  <p className="text-xs text-gray-500">
+                    A full-width hero with heading and CTA
+                  </p>
+                </div>
+                <div className="border rounded-md p-3 hover:border-blue-500 cursor-pointer" onClick={() => handleInsertTemplate('features')}>
+                  <div className="h-20 bg-gray-100 mb-2 rounded"></div>
+                  <h4 className="text-sm font-medium">Features Grid</h4>
+                  <p className="text-xs text-gray-500">
+                    Showcase features in a responsive grid
+                  </p>
+                </div>
                 </div>
               </TabsContent>
               <TabsContent value="saved" className="p-4">
@@ -640,6 +854,7 @@ const [reusableBlocks, setReusableBlocks] = useState([]);
                   variant="outline"
                   size="sm"
                   className="bg-white/80 backdrop-blur-sm"
+                  onClick={handleShowCode}
                 >
                   <Code2 className="h-4 w-4 mr-1" /> Code
                 </Button>
@@ -647,6 +862,7 @@ const [reusableBlocks, setReusableBlocks] = useState([]);
                   variant="outline"
                   size="sm"
                   className="bg-white/80 backdrop-blur-sm"
+                  onClick={handleShowHistory}
                 >
                   <History className="h-4 w-4 mr-1" /> History
                 </Button>
@@ -740,6 +956,78 @@ const [reusableBlocks, setReusableBlocks] = useState([]);
           </div>
         )}
 
+        {/* History Panel */}
+        {isHistoryOpen && (
+          <div className="fixed inset-y-0 right-0 w-96 bg-white shadow-lg z-50 border-l">
+            <div className="p-4 border-b flex justify-between items-center">
+              <h3 className="text-lg font-medium">History</h3>
+              <button
+                onClick={() => setIsHistoryOpen(false)}
+                className="p-1 hover:bg-gray-100 rounded"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-4">
+              <div className="space-y-2">
+                <div className="text-sm text-gray-500">
+                  Version history will be shown here
+                </div>
+                <Button variant="outline" className="w-full">
+                  Restore Previous Version
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Help Panel */}
+        {isHelpOpen && (
+          <div className="fixed inset-y-0 right-0 w-96 bg-white shadow-lg z-50 border-l">
+            <div className="p-4 border-b flex justify-between items-center">
+              <h3 className="text-lg font-medium">Help & Shortcuts</h3>
+              <button
+                onClick={() => setIsHelpOpen(false)}
+                className="p-1 hover:bg-gray-100 rounded"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-4 space-y-4">
+              <div>
+                <h4 className="font-medium mb-2">Keyboard Shortcuts</h4>
+                <div className="space-y-1 text-sm">
+                  <div className="flex justify-between">
+                    <span>Undo</span>
+                    <kbd className="px-2 py-1 bg-gray-100 rounded">Ctrl+Z</kbd>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Redo</span>
+                    <kbd className="px-2 py-1 bg-gray-100 rounded">Ctrl+Shift+Z</kbd>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Delete</span>
+                    <kbd className="px-2 py-1 bg-gray-100 rounded">Del</kbd>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Duplicate</span>
+                    <kbd className="px-2 py-1 bg-gray-100 rounded">Ctrl+D</kbd>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h4 className="font-medium mb-2">Getting Started</h4>
+                <ul className="text-sm space-y-1 text-gray-600">
+                  <li>• Drag components from the left panel</li>
+                  <li>• Click components to select and edit</li>
+                  <li>• Use the properties panel to customize</li>
+                  <li>• Save your work regularly</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Settings Panel */}
         {isSettingsOpen && (
           <div className="fixed inset-y-0 right-0 w-96 bg-white shadow-lg z-50 border-l">
@@ -769,7 +1057,7 @@ const [reusableBlocks, setReusableBlocks] = useState([]);
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="text-sm font-medium">Featured Image</h4>
-                  <button className="text-sm text-blue-600 hover:text-blue-800">
+                  <button className="text-sm text-blue-600 hover:text-blue-800" onClick={handleSetFeaturedImage}>
                     Set featured image
                   </button>
                 </div>
@@ -829,7 +1117,7 @@ const [reusableBlocks, setReusableBlocks] = useState([]);
                   </div>
                   <div className="flex items-center justify-between">
                     <Label htmlFor="custom-css">Custom CSS</Label>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={handleEditCSS}>
                       Edit CSS
                     </Button>
                   </div>
@@ -838,6 +1126,38 @@ const [reusableBlocks, setReusableBlocks] = useState([]);
             </div>
           </div>
         )}
+
+        {/* Code View Panel */}
+        {isCodeViewOpen && (
+          <div className="fixed inset-y-0 right-0 w-96 bg-white shadow-lg z-50 border-l">
+            <div className="p-4 border-b flex justify-between items-center">
+              <h3 className="text-lg font-medium">Generated Code</h3>
+              <button
+                onClick={() => setIsCodeViewOpen(false)}
+                className="p-1 hover:bg-gray-100 rounded"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-4">
+              <div className="bg-gray-100 p-4 rounded-md font-mono text-sm overflow-auto max-h-96">
+                <pre>{JSON.stringify(components, null, 2)}</pre>
+              </div>
+              <div className="mt-4 flex gap-2">
+                <Button className="flex-1">Copy HTML</Button>
+                <Button variant="outline" className="flex-1">Copy CSS</Button>
+              </div>
+            </div>
+          </div>
+        )}
+        {activeId ? (
+          <div className="bg-blue-100 p-4 rounded shadow-lg border border-blue-200">
+            <div className="flex items-center">
+              <LayoutGrid size={16} className="mr-2 text-blue-600" />
+              <span className="text-sm font-medium">Dragging {activeId}</span>
+            </div>
+          </div>
+        ) : null}
       </div>
 
       <DragOverlay>

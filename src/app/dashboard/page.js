@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus,
@@ -219,7 +220,7 @@ export default function DashboardPage() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
             <p className="text-gray-500">
-              Welcome back! Here's what's happening with your projects.
+              Welcome back! Here&apos;s what&apos;s happening with your projects.
             </p>
           </div>
 
@@ -438,10 +439,11 @@ export default function DashboardPage() {
                     className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-blue-100 transition-all duration-300"
                   >
                     <div className="h-48 bg-gray-100 relative group">
-                      <img
+                      <Image
                         src={project.thumbnail}
                         alt={project.name}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                         <div className="flex space-x-2">
@@ -605,11 +607,12 @@ export default function DashboardPage() {
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            <div className="flex-shrink-0 h-10 w-16 rounded-md overflow-hidden bg-gray-100">
-                              <img
-                                className="h-full w-full object-cover"
+                            <div className="flex-shrink-0 h-10 w-16 rounded-md overflow-hidden bg-gray-100 relative">
+                              <Image
+                                className="object-cover"
                                 src={project.thumbnail}
                                 alt=""
+                                fill
                               />
                             </div>
                             <div className="ml-4">

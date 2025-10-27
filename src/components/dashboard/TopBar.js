@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Bell,
@@ -126,11 +127,14 @@ const TopBar = () => {
                 aria-expanded="false"
                 aria-haspopup="true"
               >
-                <img
-                  className="h-8 w-8 rounded-full"
-                  src={user.avatar}
-                  alt={user.name}
-                />
+                <div className="h-8 w-8 relative">
+                  <Image
+                    className="rounded-full"
+                    src={user.avatar}
+                    alt={user.name}
+                    fill
+                  />
+                </div>
                 <span className="hidden md:inline-block text-sm font-medium text-gray-700">
                   {user.name.split(' ')[0]}
                 </span>
@@ -152,11 +156,14 @@ const TopBar = () => {
                   >
                     <div className="py-3 px-4 border-b border-gray-100">
                       <div className="flex items-center space-x-3">
-                        <img
-                          className="h-10 w-10 rounded-full"
-                          src={user.avatar}
-                          alt={user.name}
-                        />
+                        <div className="h-10 w-10 relative">
+                          <Image
+                            className="rounded-full"
+                            src={user.avatar}
+                            alt={user.name}
+                            fill
+                          />
+                        </div>
                         <div>
                           <p className="text-sm font-medium text-gray-900">{user.name}</p>
                           <p className="text-xs text-gray-500">{user.email}</p>

@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import { 
   Search, 
   Grid, 
@@ -220,10 +221,11 @@ export default function TemplatesPage() {
                 className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group"
               >
                 <div className="relative h-48 bg-gray-100 overflow-hidden">
-                  <img
+                  <Image
                     src={template.preview}
                     alt={template.name}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                     <div className="flex space-x-2">
@@ -302,8 +304,8 @@ export default function TemplatesPage() {
                 <tr key={template.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-16 rounded-md overflow-hidden bg-gray-100">
-                        <img className="h-full w-full object-cover" src={template.preview} alt="" />
+                      <div className="flex-shrink-0 h-10 w-16 rounded-md overflow-hidden bg-gray-100 relative">
+                        <Image className="object-cover" src={template.preview} alt="" fill />
                       </div>
                       <div className="ml-4">
                         <div className="text-sm font-medium text-gray-900">{template.name}</div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   User,
@@ -780,7 +781,7 @@ function NotificationSettings({ notifications, setNotifications }) {
       <div>
         <h3 className="text-lg font-medium text-gray-900">Email Notifications</h3>
         <p className="mt-1 text-sm text-gray-500">
-          Manage when you'll receive email notifications from us.
+          Manage when you&apos;ll receive email notifications from us.
         </p>
       </div>
 
@@ -1058,11 +1059,12 @@ function TeamSettings() {
               <div className="px-4 py-4 sm:px-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <div className="flex-shrink-0 h-10 w-10">
-                      <img
-                        className="h-10 w-10 rounded-full"
+                    <div className="flex-shrink-0 h-10 w-10 relative">
+                      <Image
+                        className="rounded-full"
                         src={person.image}
                         alt=""
+                        fill
                       />
                     </div>
                     <div className="ml-4">
@@ -1261,7 +1263,7 @@ function AdvancedSettings() {
                 </button>
               </div>
               <p className="mt-2 text-sm text-gray-500">
-                Keep your API key secure and don't share it with anyone.
+                Keep your API key secure and don&apos;t share it with anyone.
               </p>
             </div>
             <div className="mt-5 space-x-3">

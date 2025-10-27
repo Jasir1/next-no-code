@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { Upload } from 'lucide-react';
 
 export default function ImageElement({ src, alt, styles, onUpdate }) {
@@ -22,11 +23,13 @@ export default function ImageElement({ src, alt, styles, onUpdate }) {
       className="relative inline-block"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      style={styles}
     >
-      <img
+      <Image
         src={src || 'https://via.placeholder.com/400x300?text=Click+to+Upload'}
         alt={alt || 'Image'}
-        style={styles}
+        width={400}
+        height={300}
         className="max-w-full h-auto"
       />
       {isHovered && (

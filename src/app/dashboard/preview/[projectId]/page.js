@@ -2,6 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { X, Smartphone, Tablet, Monitor } from 'lucide-react';
 import Link from 'next/link';
 
@@ -53,12 +54,14 @@ export default function PreviewPage() {
 
       case 'image':
         return (
-          <img
-            key={component.id}
-            src={component.src}
-            alt={component.alt}
-            style={style}
-          />
+          <div key={component.id} style={style} className="relative">
+            <Image
+              src={component.src}
+              alt={component.alt}
+              fill
+              className="object-cover"
+            />
+          </div>
         );
 
       case 'container':

@@ -96,8 +96,22 @@ export const useEditorStore = create((set, get) => ({
     });
   },
   
-  clearCanvas: () => {
-    set({ components: [], selectedComponent: null });
-    get().saveHistory();
+  duplicateComponent: (id) => {
+    const componentToDuplicate = get().components.find(c => c.id === id);
+    if (componentToDuplicate) {
+      const duplicatedComponent = {
+        ...componentToDuplicate,
+        id: uuidv4(),
+        styles: { ...componentToDuplicate.styles },
+      };
+      // Don't duplicate children for now to avoid complexity
+      delete duplicatedComponent.children;
+      
+      set((state) => ({
+        components: [...state.components, duplicatedComponent],
+        selectedComponent: duplicatedComponent.id,
+      }));
+      get().saveHistory();
+    }
   },
 }));

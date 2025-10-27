@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Layout, Smartphone, Monitor, Tablet, 
   Move, X, Plus, Minus, RotateCw, 
-  Type, Image, Grid, MessageCircle,
+  Type, Image as ImageIcon, Grid, MessageCircle,
   ArrowRight, Download, Rocket,
   Code
 } from 'lucide-react';
@@ -22,7 +23,7 @@ const BuilderInterface = () => {
   const availableComponents = [
     { id: 1, type: 'features', name: 'Features', icon: <Grid size={16} /> },
     { id: 2, type: 'testimonials', name: 'Testimonials', icon: <Type size={16} /> },
-    { id: 3, type: 'gallery', name: 'Image Gallery', icon: <Image size={16} /> },
+    { id: 3, type: 'gallery', name: 'Image Gallery', icon: <ImageIcon size={16} /> },
     { id: 4, type: 'contact', name: 'Contact Form', icon: <MessageCircle size={16} /> },
   ];
 

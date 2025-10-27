@@ -3,6 +3,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   FolderOpen, 
   Layout, 
@@ -52,7 +53,9 @@ export default function Sidebar() {
       <div className="mb-10">
         <div className="w-12 h-12 bg-gradient-to-br from-blue-200 to-purple-200 rounded-xl flex items-center justify-center shadow-md">
           <Link href="/dashboard">
-            <img src="/img/layers.png" alt="Logo" className="w-8 h-8" />
+            <div className="w-8 h-8 relative">
+              <Image src="/img/layers.png" alt="Logo" fill className="object-contain" />
+            </div>
           </Link>
         </div>
       </div>
